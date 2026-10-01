@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>生词本 · CET-6</title><link rel="stylesheet" href="assets/site.css"></head>
+<body>
+<header class="topbar"><a class="brand" href="index.html">CET-6 真题</a><span class="crumb">生词本</span><span class="spacer"></span><a class="nav" href="index.html">首页</a><a class="nav" href="writing/">作文与翻译</a></header>
+<main>
+<h1>★ 我的生词本</h1>
+<div class="toolbar">
+  <button class="btn primary" onclick="cet6.exportVocab()">导出 JSON</button>
+  <label class="btn">导入 JSON<input type="file" accept=".json" style="display:none" onchange="if(this.files[0])cet6.importVocab(this.files[0])"></label>
+  <button class="btn" id="maskBtn">遮住释义（自测）</button>
+  <span class="hint" id="count"></span>
+</div>
+<div class="card" id="list"></div>
+</main>
+<script>window.DICT_BASE=""</script>
+<script src="assets/site.js"></script>
+<script>
+(function(){
+  var v = {};
+  try { v = JSON.parse(localStorage.getItem('cet6_vocab') || '{}') || {}; } catch (e) { v = {}; }
+  var keys = Object.keys(v).sort();
+  document.getElementById('count').textContent = '共 ' + keys.length + ' 个生词';
+  var box = document.getElementById('list');
+  if (!keys.length) { box.innerHTML = '<p class="hint">还没有生词。去任意套卷页面点击英文单词即可收藏。</p>'; return; }
+  var htmlStr = keys.map(function(k){
+    var e = v[k] || {};
+    var safe = function(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); };
+    return '<div class="vocab-item"><div class="t"><b class="en">' + safe(k) + '</b>' +
+      (e.p ? ' <span class="hint">/' + safe(e.p) + '/</span>' : '') +
+      (e.s ? ' <span class="badge">' + safe(e.s) + '</span>' : '') +
+      '<div class="zh">' + safe(e.t) + '</div></div>' +
+      '<button class="btn small" data-w="' + safe(k) + '">移除</button></div>';
+  }).join('');
+  box.innerHTML = htmlStr;
+  box.addEventListener('click', function(ev){
+    var b = ev.target.closest('[data-w]');
+    if (b) { cet6.removeVocab(b.getAttribute('data-w')); location.reload(); }
+  });
+  var masked = false;
+  document.getElementById('maskBtn').onclick = function(){
+    masked = !masked;
+    document.body.classList.toggle('hide-zh', masked);
+    this.textContent = masked ? '显示释义' : '遮住释义（自测）';
+  };
+})();
+</script>
+</body></html>
