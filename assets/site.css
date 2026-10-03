@@ -122,3 +122,32 @@ mark.word-hover { background: var(--accent-soft); outline: 1px dashed var(--acce
   .en { font-size: 16.5px; }
   #player audio { min-width: 130px; }
 }
+
+/* ---------- 主题切换（默认藏青 = 无 data-theme，四套扩展主题仅覆写强调色系，亮暗模式各给一组） ---------- */
+[data-theme="emerald"] { --accent: #1e5c46; --accent-soft: #e7f1ec; }
+[data-theme="wine"]    { --accent: #8c2f39; --accent-soft: #f6ebeb; }
+[data-theme="amber"]   { --accent: #8a5a14; --accent-soft: #f5eedd; }
+[data-theme="violet"]  { --accent: #54479c; --accent-soft: #eeecf7; }
+@media (prefers-color-scheme: dark) {
+  [data-theme="emerald"] { --accent: #8fc9ae; --accent-ink: #0f1713; --accent-soft: #1e2b25; }
+  [data-theme="wine"]    { --accent: #df8f96; --accent-ink: #1b1012; --accent-soft: #2e2123; }
+  [data-theme="amber"]   { --accent: #d4b06a; --accent-ink: #1a1408; --accent-soft: #2c2515; }
+  [data-theme="violet"]  { --accent: #b0a3e6; --accent-ink: #14111f; --accent-soft: #252038; }
+}
+
+/* 主题切换按钮与弹出面板 */
+.themer { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 99px;
+  width: 30px; height: 30px; padding: 0; cursor: pointer; font-size: 15px; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+.themer:hover { border-color: var(--accent); }
+.themepop { position: fixed; z-index: 210; background: var(--card); border: 1px solid var(--line);
+  border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,.18); padding: 8px; display: none; min-width: 150px; }
+.themepop.open { display: block; }
+.themepop .trow { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 8px;
+  cursor: pointer; border: none; background: none; width: 100%; font-size: 14px; color: var(--ink); text-align: left; }
+.themepop .trow:hover { background: var(--accent-soft); }
+.themepop .dot { width: 15px; height: 15px; border-radius: 50%; flex: 0 0 auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+.themepop .trow.on { background: var(--accent-soft); }
+.themepop .trow.on .tname { color: var(--accent); font-weight: 700; }
+.themepop .tick { margin-left: auto; visibility: hidden; color: var(--accent); font-size: 13px; }
+.themepop .trow.on .tick { visibility: visible; }
