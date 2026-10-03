@@ -3,34 +3,35 @@
   'use strict';
   var $ = function (s, el) { return (el || document).querySelector(s); };
 
-  /* ---------- 主题切换（5 套配色，localStorage 记忆；须在首次绘制前应用） ---------- */
-  var THEMES = [
-    { id: '',        name: '藏青 · 默认', c: '#1f3a5f' },
-    { id: 'emerald', name: '墨绿',        c: '#1e5c46' },
-    { id: 'wine',    name: '绛红',        c: '#8c2f39' },
-    { id: 'amber',   name: '琥珀',        c: '#8a5a14' },
-    { id: 'violet',  name: '青紫',        c: '#54479c' }
+  /* ---------- 整页主题切换（自动/浅色/深色/护眼米黄/夜读墨蓝，localStorage 记忆；须在首次绘制前应用） ---------- */
+  var MODES = [
+    { id: '',      name: '自动 · 跟随系统', dot: 'linear-gradient(135deg,#faf9f6 50%,#191a1e 50%)' },
+    { id: 'light', name: '浅色', dot: '#faf9f6' },
+    { id: 'dark',  name: '深色', dot: '#191a1e' },
+    { id: 'sepia', name: '护眼米黄', dot: '#f3ead8' },
+    { id: 'night', name: '夜读墨蓝', dot: '#0f141d' }
   ];
-  var THEME_KEY = 'cet6_theme';
-  function savedTheme() { try { return localStorage.getItem(THEME_KEY) || ''; } catch (e) { return ''; } }
-  function applyTheme(id) {
-    if (id) document.documentElement.setAttribute('data-theme', id);
-    else document.documentElement.removeAttribute('data-theme');
+  var MODE_KEY = 'cet6_mode';
+  function savedMode() { try { return localStorage.getItem(MODE_KEY) || ''; } catch (e) { return ''; } }
+  function applyMode(id) {
+    if (id) document.documentElement.setAttribute('data-theme-mode', id);
+    else document.documentElement.removeAttribute('data-theme-mode');
   }
-  applyTheme(savedTheme());
+  try { localStorage.removeItem('cet6_theme'); } catch (e) {}  // 清理上一版强调色主题遗留键
+  applyMode(savedMode());
   function initThemer() {
     var bar = $('.topbar');
     if (!bar || $('#themerBtn')) return;
-    var cur = savedTheme();
+    var cur = savedMode();
     var btn = document.createElement('button');
-    btn.id = 'themerBtn'; btn.className = 'themer'; btn.title = '切换主题色'; btn.textContent = '🎨';
+    btn.id = 'themerBtn'; btn.className = 'themer'; btn.title = '切换主题'; btn.textContent = '🎨';
     bar.appendChild(btn);
     var popEl = document.createElement('div');
     popEl.id = 'themepop'; popEl.className = 'themepop';
-    popEl.innerHTML = THEMES.map(function (t) {
-      return '<button class="trow' + (t.id === cur ? ' on' : '') + '" data-theme-id="' + t.id + '">' +
-        '<span class="dot" style="background:' + t.c + '"></span>' +
-        '<span class="tname">' + t.name + '</span><span class="tick">✓</span></button>';
+    popEl.innerHTML = MODES.map(function (m) {
+      return '<button class="trow' + (m.id === cur ? ' on' : '') + '" data-mode-id="' + m.id + '">' +
+        '<span class="dot" style="background:' + m.dot + '"></span>' +
+        '<span class="tname">' + m.name + '</span><span class="tick">✓</span></button>';
     }).join('');
     document.body.appendChild(popEl);
     btn.addEventListener('click', function (e) {
@@ -46,9 +47,9 @@
     popEl.addEventListener('click', function (e) {
       var row = e.target.closest('.trow');
       if (!row) return;
-      var id = row.getAttribute('data-theme-id');
-      applyTheme(id);
-      try { localStorage.setItem(THEME_KEY, id); } catch (err) {}
+      var id = row.getAttribute('data-mode-id');
+      applyMode(id);
+      try { localStorage.setItem(MODE_KEY, id); } catch (err) {}
       popEl.querySelectorAll('.trow').forEach(function (x) { x.classList.toggle('on', x === row); });
       popEl.classList.remove('open');
     });

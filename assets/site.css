@@ -123,17 +123,18 @@ mark.word-hover { background: var(--accent-soft); outline: 1px dashed var(--acce
   #player audio { min-width: 130px; }
 }
 
-/* ---------- 主题切换（默认藏青 = 无 data-theme，四套扩展主题仅覆写强调色系，亮暗模式各给一组） ---------- */
-[data-theme="emerald"] { --accent: #1e5c46; --accent-soft: #e7f1ec; }
-[data-theme="wine"]    { --accent: #8c2f39; --accent-soft: #f6ebeb; }
-[data-theme="amber"]   { --accent: #8a5a14; --accent-soft: #f5eedd; }
-[data-theme="violet"]  { --accent: #54479c; --accent-soft: #eeecf7; }
-@media (prefers-color-scheme: dark) {
-  [data-theme="emerald"] { --accent: #8fc9ae; --accent-ink: #0f1713; --accent-soft: #1e2b25; }
-  [data-theme="wine"]    { --accent: #df8f96; --accent-ink: #1b1012; --accent-soft: #2e2123; }
-  [data-theme="amber"]   { --accent: #d4b06a; --accent-ink: #1a1408; --accent-soft: #2c2515; }
-  [data-theme="violet"]  { --accent: #b0a3e6; --accent-ink: #14111f; --accent-soft: #252038; }
-}
+/* ---------- 整页主题切换（html[data-theme-mode]）----------
+   无属性 = 自动跟随系统；四套强制主题整组覆写全部变量，优先级高于上方暗色媒体查询 */
+:root[data-theme-mode="light"] { --bg: #faf9f6; --card: #ffffff; --ink: #2b2b33; --muted: #6b6b76; --line: #e6e4dd;
+  --accent: #1f3a5f; --accent-ink: #ffffff; --accent-soft: #eef2f7;
+  --zh: #8a6d3b; --ok: #2e7d32; --shadow: 0 1px 3px rgba(0,0,0,.08); }
+:root[data-theme-mode="dark"] { --bg: #191a1e; --card: #212227; --ink: #d8d7d3; --muted: #9a9aa4; --line: #33343b;
+  --accent: #7fa6d9; --accent-ink: #14161c; --accent-soft: #262b33; --zh: #c2a06a; --shadow: none; }
+:root[data-theme-mode="sepia"] { --bg: #f3ead8; --card: #faf4e6; --ink: #3b3222; --muted: #8a7d64; --line: #e0d4b8;
+  --accent: #8a5a14; --accent-ink: #ffffff; --accent-soft: #eee2c8;
+  --zh: #7c6033; --ok: #2e7d32; --shadow: 0 1px 3px rgba(0,0,0,.06); }
+:root[data-theme-mode="night"] { --bg: #0f141d; --card: #161e2b; --ink: #d4dbe8; --muted: #8a94a8; --line: #28324a;
+  --accent: #7fa6d9; --accent-ink: #0f141d; --accent-soft: #1e2941; --zh: #c2a06a; --shadow: none; }
 
 /* 主题切换按钮与弹出面板 */
 .themer { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 99px;
